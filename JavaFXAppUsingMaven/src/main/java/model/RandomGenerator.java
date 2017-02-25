@@ -19,10 +19,45 @@
  */
 package model;
 
+import java.util.Random;
+import java.util.stream.LongStream;
+import umontreal.ssj.rng.MRG32k3a;
+import umontreal.ssj.rng.MT19937;
+
 /**
  *
  * @author Jarretier Adrien "jarretier.adrien@gmail.com"
  */
 public class RandomGenerator {
-    
+
+    private MT19937 gen;
+
+    /* Private constructor     */
+    private RandomGenerator() {
+        Random rand = new Random();
+        LongStream seed = LongStream.concat(rand.longs(3, 1, 4294967087L), rand.longs(3, 1, 4294944443L));
+
+        MRG32k3a.setPackageSeed(seed.toArray());
+
+        MRG32k3a mrg = new MRG32k3a();
+        gen = new MT19937(mrg);
+    }
+
+    private static class RandomGeneratorHolder {
+
+        private static final RandomGenerator INSTANCE = new RandomGenerator();
+    }
+
+    /* Access point to the unique instance of the singleton */
+    public static RandomGenerator getGenerator() {
+        return RandomGeneratorHolder.INSTANCE;
+    }
+
+    /**
+     * Generates a uniformly distributed random unsigned int
+     *
+     */
+    public int rollI(int min, int max) {
+        return gen.nextInt(min, max);
+    }
 }
