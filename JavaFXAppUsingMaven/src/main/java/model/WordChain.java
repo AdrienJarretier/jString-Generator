@@ -86,6 +86,8 @@ public class WordChain {
             k = 1;
         }
 
+        followingCharsCount = new HashMap<>();
+
         // transform the word to lower case
         this.word = word.toLowerCase();
 
@@ -94,10 +96,9 @@ public class WordChain {
         for (int i = 0; i < k; ++i) {
             currentPart.append('_');
         }
-        
+
         // currentPart initialized all null
         // for ex with k = 3 => currentPart = "___"
-
         // now we get each letter and we build our chain
         for (int i = 0; i < this.word.length(); ++i) {
 
