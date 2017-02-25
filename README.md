@@ -4,7 +4,7 @@
 
 ### This is a port of my project in C++ https://github.com/AdrienJarretier/string-generator
 
-Using JavaFx I'll ad GUI support, you need Java 8 with Javafx to make this work.
+Using JavaFx, I'll add a GUI, you need Java 8 with Javafx to make this work.
 
 Also for random numbers generation I'm using [ssj](https://github.com/umontreal-simul/ssj),
 the dependancy should be handled automatically by Maven in NetBeans.
