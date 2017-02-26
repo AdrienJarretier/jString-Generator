@@ -68,10 +68,10 @@ public class WordChain {
 
     public WordChain(String word, int k) {
 
-        followingCharsCount = new HashMap<>();
-
         // transform the word to lower case
-        this.word = word.toLowerCase();
+        w = word.toLowerCase();
+
+        followingCharsCount = new HashMap<>();
 
         StringBuilder currentPart = new StringBuilder();
 
@@ -82,9 +82,9 @@ public class WordChain {
         // currentPart initialized all null
         // for ex with k = 3 => currentPart = "___"
         // now we get each letter and we build our chain
-        for (int i = 0; i < this.word.length(); ++i) {
+        for (int i = 0; i < this.w.length(); ++i) {
 
-            char nextLetter = word.charAt(i);
+            char nextLetter = this.w.charAt(i);
 
             Common.incrementCount(followingCharsCount, currentPart.toString(), nextLetter);
 
@@ -99,7 +99,7 @@ public class WordChain {
         return followingCharsCount;
     }
 
-    private String word; // the original word
+    private String w; // the original word
 
     private HashMap<String, HashMap<Character, Integer>> followingCharsCount;
 }

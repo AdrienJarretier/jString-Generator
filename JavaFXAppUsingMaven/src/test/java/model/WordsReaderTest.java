@@ -1,7 +1,7 @@
 /*
  * String_Generator - Text analysis for realistic random strings generation
  * 
- * WordChainTest.java
+ * WordsReaderTest.java
  * Copyright (C) 2017 Jarretier Adrien
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,32 +19,31 @@
  */
 package model;
 
+import java.io.IOException;
 import org.junit.Test;
 
 /**
  *
  * @author Jarretier Adrien "jarretier.adrien@gmail.com"
  */
-public class WordChainTest {
+public class WordsReaderTest {
 
-    public WordChainTest() {
+    public WordsReaderTest() {
     }
 
     @Test
-    public void displayChain() {
-        String word = "Commimmiora";
-        WordChain wc = new WordChain(word, 2);
-        System.out.println("word : " + word);
+    public void display() throws IOException {
+        WordsReader wr = new WordsReader("resources/words-lists/shortEnglish.txt");
 
-        wc.getFollowings().forEach((part, folLetters) -> {
-            System.out.println("[" + part + "]");
-            folLetters.forEach((let, count) -> {
+        System.out.println("followingLetters : ");
 
-                System.out.println(" | -- [" + let + "] : " + count);
+        System.out.println("1-order : ");
+        wr.readAll(1);
+        DisplayMethods.displayMap(wr.getFollowings());
 
-            });
-        });
-
+        System.out.println("2-order : ");
+        wr.readAll(2);
+        DisplayMethods.displayMap(wr.getFollowings());
     }
 
 }

@@ -1,7 +1,7 @@
 /*
  * String_Generator - Text analysis for realistic random strings generation
  * 
- * WordChainTest.java
+ * DisplayMethods.java
  * Copyright (C) 2017 Jarretier Adrien
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,24 +19,17 @@
  */
 package model;
 
-import org.junit.Test;
+import java.util.HashMap;
 
 /**
  *
  * @author Jarretier Adrien "jarretier.adrien@gmail.com"
  */
-public class WordChainTest {
+class DisplayMethods {
 
-    public WordChainTest() {
-    }
+    static void displayMap(HashMap<String, HashMap<Character, Integer>> mapCmapCUI) {
 
-    @Test
-    public void displayChain() {
-        String word = "Commimmiora";
-        WordChain wc = new WordChain(word, 2);
-        System.out.println("word : " + word);
-
-        wc.getFollowings().forEach((part, folLetters) -> {
+        mapCmapCUI.forEach((part, folLetters) -> {
             System.out.println("[" + part + "]");
             folLetters.forEach((let, count) -> {
 
@@ -44,7 +37,6 @@ public class WordChainTest {
 
             });
         });
-
     }
 
 }
