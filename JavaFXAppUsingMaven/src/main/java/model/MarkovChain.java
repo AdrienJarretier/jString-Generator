@@ -38,6 +38,8 @@ public class MarkovChain {
     public MarkovChain(String filename, int k) throws IOException {
         order = k;
         state = new String();
+        followingLetters = new HashMap<>();
+        
         for (int i = 0; i < k; ++i) {
             state += '_';
         }

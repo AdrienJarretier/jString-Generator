@@ -19,7 +19,9 @@
  */
 package model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import javafx.util.Pair;
 
 /**
  *
@@ -34,6 +36,20 @@ class DisplayMethods {
             folLetters.forEach((let, count) -> {
 
                 System.out.println(" | -- [" + let + "] : " + count);
+
+            });
+        });
+    }
+
+    static void displayMapList(HashMap<String, ArrayList<Pair<Integer, Character>>> mapSlistIC) {
+
+        mapSlistIC.forEach((part, folLetters) -> {
+            System.out.println("[" + part + "]");
+            folLetters.forEach((pair) -> {
+
+                int count = pair.getKey();
+                char let = pair.getValue();
+                System.out.println(" | -- [" + count + "] : " + let);
 
             });
         });
