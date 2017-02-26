@@ -40,15 +40,15 @@ public class WordsReader {
     public WordsReader(String filename) {
         this.filename = filename;
         wordsCount = 0;
+        followingLetters = new HashMap<>();
     }
 
     /**
     reads the file and fill in the maps
      **/
-    public void readAll(Integer k) throws FileNotFoundException, IOException {
-        if (k == null) {
-            k = 1;
-        }
+    public void readAll(int k) throws FileNotFoundException, IOException {
+
+        followingLetters.clear();
 
         BufferedReader wordList
                 = new BufferedReader(new FileReader(this.filename));
