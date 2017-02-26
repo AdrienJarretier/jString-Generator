@@ -36,14 +36,7 @@ public class WordChainTest {
         WordChain wc = new WordChain(word, 2);
         System.out.println("word : " + word);
 
-        wc.getFollowings().forEach((part, folLetters) -> {
-            System.out.println("[" + part + "]");
-            folLetters.forEach((let, count) -> {
-
-                System.out.println(" | -- [" + let + "] : " + count);
-
-            });
-        });
+        DisplayMethods.displayMap(wc.getFollowings());
 
     }
 
