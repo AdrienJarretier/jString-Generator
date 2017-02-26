@@ -66,25 +66,7 @@ word = aalii :
  **/
 public class WordChain {
 
-    /**
-    Increments the count of the given c letter
-    coming after currentPart in this world
-    
-    @param currentPart
-    @param c
-     */
-    private void incrementCount(StringBuilder currentPart, char c) {
-
-        String currentPartString = currentPart.toString();
-        followingCharsCount.putIfAbsent(currentPartString, new HashMap<>());
-        int count = followingCharsCount.get(currentPartString).getOrDefault(c, 0);
-        followingCharsCount.get(currentPartString).put(c, count + 1);
-    }
-
-    public WordChain(String word, Integer k) {
-        if (k == null) {
-            k = 1;
-        }
+    public WordChain(String word, int k) {
 
         followingCharsCount = new HashMap<>();
 
@@ -104,13 +86,13 @@ public class WordChain {
 
             char nextLetter = word.charAt(i);
 
-            incrementCount(currentPart, nextLetter);
+            Common.incrementCount(followingCharsCount, currentPart.toString(), nextLetter);
 
             currentPart.deleteCharAt(0);
             currentPart.append(nextLetter);
         }
 
-        incrementCount(currentPart, '_');
+        Common.incrementCount(followingCharsCount, currentPart.toString(), '_');
     }
 
     public final HashMap<String, HashMap<Character, Integer>> getFollowings() {

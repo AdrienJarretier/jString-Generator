@@ -19,6 +19,10 @@
  */
 package model;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
 
 /**
@@ -41,10 +45,30 @@ public class WordsReader {
     /**
     reads the file and fill in the maps
      **/
-    public void readAll(Integer k) {
+    public void readAll(Integer k) throws FileNotFoundException, IOException {
         if (k == null) {
             k = 1;
         }
+
+        BufferedReader wordList
+                = new BufferedReader(new FileReader(this.filename));
+
+        String word = new String();
+        while ((word = wordList.readLine()) != null) {
+            ++wordsCount;
+
+            WordChain wordChain = new WordChain(word, k);
+
+            wordChain.getFollowings().forEach((part, folLetters) -> {
+                folLetters.forEach((let, count) -> {
+                    Common.incrementCount(followingLetters, part, let, count);
+                });
+            });
+
+        }
+
+        wordList.close();
+
     }
 
     public HashMap<String, HashMap<Character, Integer>> getFollowings() {
