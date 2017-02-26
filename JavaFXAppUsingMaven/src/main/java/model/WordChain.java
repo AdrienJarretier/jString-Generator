@@ -95,7 +95,7 @@ public class WordChain {
         Common.incrementCount(followingCharsCount, currentPart.toString(), '_');
     }
 
-    public final HashMap<String, HashMap<Character, Integer>> getFollowings() {
+    public HashMap<String, HashMap<Character, Integer>> getFollowings() {
         return followingCharsCount;
     }
 
