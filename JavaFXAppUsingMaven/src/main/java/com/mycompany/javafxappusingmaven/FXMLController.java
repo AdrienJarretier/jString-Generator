@@ -19,18 +19,20 @@
  */
 package com.mycompany.javafxappusingmaven;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import model.RandomGenerator;
-import umontreal.ssj.rng.MT19937;
+import model.RandomString;
 
 public class FXMLController implements Initializable {
-
-    private MT19937 rng;
 
     @FXML
     private Label label;
@@ -44,5 +46,41 @@ public class FXMLController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
+        String WORDS_LIST_FOLDER = "resources/words-lists";
+        String ENGLISH_WORDS = WORDS_LIST_FOLDER + "/english.txt";
+        String FRENCH_WORDS = WORDS_LIST_FOLDER + "/liste.de.mots.francais.frgut.txt";
+        String ENGLISH_SHORT = WORDS_LIST_FOLDER + "/shortEnglish.txt";
+
+        int ORDER = 3;
+
+        System.out.println("Analysing language for generation of a " + ORDER + "-order Markov Chain...");
+
+        RandomString rs;
+        try {
+            rs = new RandomString(ENGLISH_WORDS, ORDER);
+
+            System.out.println("Done.");
+
+            int minLength, maxLength;
+
+            System.out.print("Min length : ");
+            Scanner sc = new Scanner(System.in);
+
+            minLength = sc.nextInt();
+            System.out.print("Max length : ");
+            maxLength = sc.nextInt();
+
+            System.out.println("Rolling 16 words :");
+
+            for (int i = 0; i < 16; ++i) {
+                StringBuilder rolled = new StringBuilder(rs.roll(minLength, maxLength));
+                rolled.setCharAt(0, Character.toUpperCase(rolled.charAt(0)));
+
+                System.out.println(rolled);
+            }
+        } catch (IOException ex) {
+//            Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println(ex.getMessage());
+        }
     }
 }
