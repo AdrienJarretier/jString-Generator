@@ -37,6 +37,28 @@ public class RandomString {
     }
 
     /**
+     * Generates one random word using a Markov Chain
+     * @return The generated String
+     */
+    public String roll() {
+
+        StringBuilder word;
+
+        word = new StringBuilder();
+        mc.reset();
+
+        char newLetter;
+        do {
+            newLetter = mc.transition().charAt(order - 1);
+            word.append(newLetter);
+        } while (newLetter != '_');
+
+        word.deleteCharAt(word.length() - 1);
+
+        return word.toString();
+    }
+
+    /**
         Generates one random word using a Markov Chain
         of size in between minSize and maxSize
      **/
@@ -48,20 +70,11 @@ public class RandomString {
         if (maxSize < minSize) {
             throw new IllegalArgumentException("maxSize should be greater than minSize");
         }
-
-        StringBuilder word;
-
+        String word;
         do {
-            word = new StringBuilder();
-            mc.reset();
 
-            char newLetter;
-            do {
-                newLetter = mc.transition().charAt(order - 1);
-                word.append(newLetter);
-            } while (newLetter != '_');
+            word = roll();
 
-            word.deleteCharAt(word.length() - 1);
         } while (minSize > word.length() || word.length() > maxSize);
 
         return word.toString();
