@@ -69,14 +69,12 @@ public class Main extends Application {
 //            minLength = sc.nextInt();
 //            System.out.print("Max length : ");
 //            maxLength = sc.nextInt();
-            minLength = 1;
-            maxLength = 24;
 
             mainText.getChildren().add(new Text("Rolling 16 words :"));
             mainText.getChildren().add(new Text(System.getProperty("line.separator")));
 
             for (int i = 0; i < 16; ++i) {
-                StringBuilder rolled = new StringBuilder(rs.roll(minLength, maxLength));
+                StringBuilder rolled = new StringBuilder(rs.roll());
                 rolled.setCharAt(0, Character.toUpperCase(rolled.charAt(0)));
 
                 mainText.getChildren().add(new Text(rolled.toString()));
