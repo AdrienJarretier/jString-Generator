@@ -25,6 +25,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Observable;
 import javafx.concurrent.Task;
 
 /**
@@ -37,7 +38,7 @@ Opens and reads all the words inside a text file
 where each word is on a separate line.
 
  **/
-public class WordsReader {
+public class WordsReader extends Observable {
 
     public WordsReader(String filename) {
         this.filename = filename;
@@ -81,6 +82,13 @@ public class WordsReader {
 
                 wordList.close();
                 return null;
+            }
+
+            @Override
+            protected void succeeded() {
+                super.succeeded();
+                setChanged();
+                notifyObservers();
             }
         };
         new Thread(task).start();

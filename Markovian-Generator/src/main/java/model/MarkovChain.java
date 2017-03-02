@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.Observable;
+import java.util.Observer;
 import javafx.util.Pair;
 
 /**
@@ -33,7 +35,7 @@ import javafx.util.Pair;
     Represents a k-order Markov chain
     initialized with a file containing a list of words
  **/
-public class MarkovChain {
+public class MarkovChain implements Observer {
 
     public MarkovChain(String filename, int k) throws IOException {
         order = k;
@@ -45,25 +47,10 @@ public class MarkovChain {
         }
 
         wr = new WordsReader(filename);
+
+        wr.addObserver(this);
+
         wr.readAll(k);
-
-        wr.getFollowings().forEach((part, folLetters) -> {
-            // dealing with part
-            int cumulatedCount = 0;
-            // for each letter following part
-
-            followingLetters.putIfAbsent(part, new ArrayList<>());
-
-            ArrayList<Pair<Integer, Character>> l = followingLetters.get(part);
-
-            for (Entry<Character, Integer> e : folLetters.entrySet()) {
-
-                cumulatedCount += e.getValue();
-
-                l.add(new Pair<>(cumulatedCount, e.getKey()));
-            }
-
-        });
 
     }
 
@@ -118,5 +105,27 @@ public class MarkovChain {
 
     public void cancel() {
         wr.cancelTask();
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+
+        wr.getFollowings().forEach((part, folLetters) -> {
+            // dealing with part
+            int cumulatedCount = 0;
+            // for each letter following part
+
+            followingLetters.putIfAbsent(part, new ArrayList<>());
+
+            ArrayList<Pair<Integer, Character>> l = followingLetters.get(part);
+
+            for (Entry<Character, Integer> e : folLetters.entrySet()) {
+
+                cumulatedCount += e.getValue();
+
+                l.add(new Pair<>(cumulatedCount, e.getKey()));
+            }
+
+        });
     }
 }
