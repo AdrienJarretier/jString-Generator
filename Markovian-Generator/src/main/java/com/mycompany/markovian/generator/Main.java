@@ -6,7 +6,6 @@
 package com.mycompany.markovian.generator;
 
 import java.io.IOException;
-import java.util.Scanner;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -27,6 +26,13 @@ public class Main extends Application {
     public static void main(String[] args) {
 
         launch(args);
+    }
+
+    @Override
+    public void stop() throws Exception {
+
+        rs.cancel();
+
     }
 
     @Override
@@ -59,7 +65,7 @@ public class Main extends Application {
 
         try {
 
-            RandomString rs = new RandomString(ENGLISH_WORDS_X_4, ORDER);
+            rs = new RandomString(ENGLISH_WORDS_X_4, ORDER);
 
             System.out.println("Done.");
 
@@ -70,7 +76,6 @@ public class Main extends Application {
 //            minLength = sc.nextInt();
 //            System.out.print("Max length : ");
 //            maxLength = sc.nextInt();
-
             mainText.getChildren().add(new Text("Rolling 16 words :"));
             mainText.getChildren().add(new Text(System.getProperty("line.separator")));
 
@@ -85,5 +90,7 @@ public class Main extends Application {
             System.err.println(ex.getMessage());
         }
     }
+
+    private RandomString rs;
 
 }

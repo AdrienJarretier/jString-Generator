@@ -39,12 +39,12 @@ public class MarkovChain {
         order = k;
         state = new String();
         followingLetters = new HashMap<>();
-        
+
         for (int i = 0; i < k; ++i) {
             state += '_';
         }
 
-        WordsReader wr = new WordsReader(filename);
+        wr = new WordsReader(filename);
         wr.readAll(k);
 
         wr.getFollowings().forEach((part, folLetters) -> {
@@ -113,4 +113,10 @@ public class MarkovChain {
     private int order;
 
     private String state;
+
+    private WordsReader wr;
+
+    public void cancel() {
+        wr.cancelTask();
+    }
 }

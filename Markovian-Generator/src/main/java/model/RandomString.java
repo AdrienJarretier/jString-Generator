@@ -83,4 +83,8 @@ public class RandomString {
     private MarkovChain mc;
 
     private final int order;
+
+    public void cancel() {
+        mc.cancel();
+    }
 }
