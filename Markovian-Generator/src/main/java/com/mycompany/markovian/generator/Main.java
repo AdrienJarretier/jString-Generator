@@ -47,6 +47,7 @@ public class Main extends Application {
 
         String WORDS_LIST_FOLDER = "resources/words-lists";
         String ENGLISH_WORDS = WORDS_LIST_FOLDER + "/english.txt";
+        String ENGLISH_WORDS_X_4 = WORDS_LIST_FOLDER + "/englishx4.txt";
         String FRENCH_WORDS = WORDS_LIST_FOLDER + "/liste.de.mots.francais.frgut.txt";
         String ENGLISH_SHORT = WORDS_LIST_FOLDER + "/shortEnglish.txt";
         String TOLKIEN = WORDS_LIST_FOLDER + "/tolkiensCharacters.txt";
@@ -58,7 +59,7 @@ public class Main extends Application {
 
         try {
 
-            RandomString rs = new RandomString(TOLKIEN, ORDER);
+            RandomString rs = new RandomString(ENGLISH_WORDS_X_4, ORDER);
 
             System.out.println("Done.");
 
