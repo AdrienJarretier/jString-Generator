@@ -6,6 +6,8 @@
 package com.mycompany.markovian.generator;
 
 import java.io.IOException;
+import java.util.Observable;
+import java.util.Observer;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -18,7 +20,7 @@ import model.RandomString;
  *
  * @author Jarretier Adrien "jarretier.adrien@gmail.com"
  */
-public class Main extends Application {
+public class Main extends Application implements Observer {
 
     /**
      * @param args the command line arguments
@@ -45,7 +47,7 @@ public class Main extends Application {
         // main window fixed size
         Scene scene = new Scene(root, 800, 600);
 
-        TextFlow mainText = new TextFlow();
+        mainText = new TextFlow();
         root.setCenter(mainText);
 
         primaryStage.setScene(scene);
@@ -67,23 +69,7 @@ public class Main extends Application {
 
             rs = new RandomString(ENGLISH_WORDS_X_4, ORDER);
 
-//            int minLength, maxLength;
-//
-//            System.out.print("Min length : ");
-//            Scanner sc = new Scanner(System.in);
-//            minLength = sc.nextInt();
-//            System.out.print("Max length : ");
-//            maxLength = sc.nextInt();
-            mainText.getChildren().add(new Text("Rolling 16 words :"));
-            mainText.getChildren().add(new Text(System.getProperty("line.separator")));
-
-            for (int i = 0; i < 16; ++i) {
-                StringBuilder rolled = new StringBuilder(rs.roll());
-                rolled.setCharAt(0, Character.toUpperCase(rolled.charAt(0)));
-
-                mainText.getChildren().add(new Text(rolled.toString()));
-                mainText.getChildren().add(new Text(System.getProperty("line.separator")));
-            }
+            rs.addObserver(this);
 
         } catch (IOException ex) {
             System.err.println(ex.getMessage());
@@ -91,5 +77,22 @@ public class Main extends Application {
     }
 
     private RandomString rs;
+
+    private TextFlow mainText;
+
+    @Override
+    public void update(Observable o, Object arg) {
+
+        mainText.getChildren().add(new Text("Rolling 16 words :"));
+        mainText.getChildren().add(new Text(System.getProperty("line.separator")));
+
+        for (int i = 0; i < 16; ++i) {
+            StringBuilder rolled = new StringBuilder(rs.roll());
+            rolled.setCharAt(0, Character.toUpperCase(rolled.charAt(0)));
+
+            mainText.getChildren().add(new Text(rolled.toString()));
+            mainText.getChildren().add(new Text(System.getProperty("line.separator")));
+        }
+    }
 
 }

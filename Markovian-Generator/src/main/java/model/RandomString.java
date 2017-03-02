@@ -20,12 +20,14 @@
 package model;
 
 import java.io.IOException;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  *
  * @author Jarretier Adrien "jarretier.adrien@gmail.com"
  */
-public class RandomString {
+public class RandomString extends Observable implements Observer {
 
     /**
         Analyses the given wordsList test file to get statistics about the order of letters in words
@@ -33,6 +35,9 @@ public class RandomString {
      **/
     public RandomString(String wordsList, int k) throws IOException {
         mc = new MarkovChain(wordsList, k);
+
+        mc.addObserver(this);
+
         order = k;
     }
 
@@ -86,5 +91,11 @@ public class RandomString {
 
     public void cancel() {
         mc.cancel();
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        setChanged();
+        notifyObservers();
     }
 }

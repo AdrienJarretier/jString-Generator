@@ -35,7 +35,7 @@ import javafx.util.Pair;
     Represents a k-order Markov chain
     initialized with a file containing a list of words
  **/
-public class MarkovChain implements Observer {
+public class MarkovChain extends Observable implements Observer {
 
     public MarkovChain(String filename, int k) throws IOException {
         order = k;
@@ -127,5 +127,8 @@ public class MarkovChain implements Observer {
             }
 
         });
+
+        setChanged();
+        notifyObservers();
     }
 }
