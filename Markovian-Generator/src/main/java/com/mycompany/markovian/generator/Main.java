@@ -67,10 +67,8 @@ public class Main extends Application {
 
             rs = new RandomString(ENGLISH_WORDS_X_4, ORDER);
 
-            System.out.println("Done.");
-
-            int minLength, maxLength;
-
+//            int minLength, maxLength;
+//
 //            System.out.print("Min length : ");
 //            Scanner sc = new Scanner(System.in);
 //            minLength = sc.nextInt();
@@ -86,6 +84,7 @@ public class Main extends Application {
                 mainText.getChildren().add(new Text(rolled.toString()));
                 mainText.getChildren().add(new Text(System.getProperty("line.separator")));
             }
+
         } catch (IOException ex) {
             System.err.println(ex.getMessage());
         }
