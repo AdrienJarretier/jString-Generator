@@ -36,7 +36,6 @@ public class Main extends Application implements Observer {
     public void stop() throws Exception {
 
         rs.cancel();
-        task.cancel();
 
     }
 
@@ -93,8 +92,6 @@ public class Main extends Application implements Observer {
 
     private TextFlow mainText;
 
-    private Task<Integer> task;
-
     private void addLine(String word) {
 
         StringBuilder wordSB = new StringBuilder(word);
@@ -102,6 +99,8 @@ public class Main extends Application implements Observer {
         mainText.getChildren().add(new Text(wordSB.toString()));
         mainText.getChildren().add(new Text(System.getProperty("line.separator")));
     }
+
+    private Task<String> task;
 
     @Override
     public void update(Observable o, Object arg) {
@@ -112,24 +111,21 @@ public class Main extends Application implements Observer {
         addLine("Rolling 16 words :");
         mainText.getChildren().add(new Text(System.getProperty("line.separator")));
 
-        task = new Task<Integer>() {
+        task = new Task<String>() {
 
             @Override
-            protected Integer call() throws Exception {
+            protected String call() throws Exception {
 
-                for (int i = 0; i < 16; ++i) {
-
-                    addLine(rs.roll(5, 50));
-                    updateValue(i);
-
-                    if (isCancelled()) {
-                        updateMessage("Cancelled");
-                        break;
-                    }
-                }
-
-                return 16;
+                return rs.roll();
             }
+
+            @Override
+            protected void succeeded() {
+                super.succeeded(); //To change body of generated methods, choose Tools | Templates.
+
+                addLine(getValue());
+            }
+
         };
         new Thread(task).start();
 
