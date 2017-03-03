@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.concurrent.Task;
 
 /**
  *
@@ -68,7 +69,7 @@ public class RandomString extends Observable implements Observer {
         Generates one random word using a Markov Chain
         of size in between minSize and maxSize
      **/
-    public String roll(int minSize, int maxSize) {
+    public void roll(int minSize, int maxSize) {
         if (minSize < 1) {
             throw new IllegalArgumentException("minSize should be greater than 0");
         }
@@ -76,19 +77,38 @@ public class RandomString extends Observable implements Observer {
         if (maxSize < minSize) {
             throw new IllegalArgumentException("maxSize should be greater than minSize");
         }
-        String word;
-        do {
 
-            word = roll();
+        task = new Task<Void>() {
 
-        } while (minSize > word.length() || word.length() > maxSize);
+            @Override
+            protected Void call() throws Exception {
 
-        return word.toString();
+                do {
+
+                    String rolledWord = roll();
+
+                } while (minSize > rolledWord.length() || rolledWord.length() > maxSize);
+                return null;
+            }
+
+            @Override
+            protected void succeeded() {
+                super.succeeded(); //To change body of generated methods, choose Tools | Templates.
+
+                setChanged();
+                notifyObservers("rolledWord");
+            }
+
+        };
+        new Thread(task).start();
     }
+
+    private Task<Void> task;
 
     private MarkovChain mc;
 
     private final int order;
+    String rolledWord;
 
     public void cancel() {
         mc.cancel();
@@ -102,5 +122,9 @@ public class RandomString extends Observable implements Observer {
     public void update(Observable o, Object arg) {
         setChanged();
         notifyObservers();
+    }
+
+    public String getRolledWord() {
+        return rolledWord;
     }
 }

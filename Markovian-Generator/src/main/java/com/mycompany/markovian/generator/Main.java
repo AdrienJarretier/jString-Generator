@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 import javafx.application.Application;
-import javafx.concurrent.Task;
 import javafx.scene.Scene;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.BorderPane;
@@ -100,34 +99,25 @@ public class Main extends Application implements Observer {
         mainText.getChildren().add(new Text(System.getProperty("line.separator")));
     }
 
-    private Task<String> task;
-
     @Override
     public void update(Observable o, Object arg) {
 
-        root.setBottom(new Text("Done !"));
+        if (arg == "rolledWord") {
+            addLine(rs.getRolledWord());
+        } else {
 
-        mainText.getChildren().add(new Text(System.getProperty("line.separator")));
-        addLine("Rolling 16 words :");
-        mainText.getChildren().add(new Text(System.getProperty("line.separator")));
+            root.setBottom(new Text("Done !"));
 
-        task = new Task<String>() {
+            mainText.getChildren().add(new Text(System.getProperty("line.separator")));
+            addLine("Rolling 16 words :");
+            mainText.getChildren().add(new Text(System.getProperty("line.separator")));
 
-            @Override
-            protected String call() throws Exception {
+            for (int i = 0; i < 2; ++i) {
 
-                return rs.roll();
+                rs.roll(1,50);
             }
 
-            @Override
-            protected void succeeded() {
-                super.succeeded(); //To change body of generated methods, choose Tools | Templates.
-
-                addLine(getValue());
-            }
-
-        };
-        new Thread(task).start();
+        }
 
     }
 
