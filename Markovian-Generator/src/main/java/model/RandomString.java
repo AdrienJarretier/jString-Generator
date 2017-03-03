@@ -22,6 +22,7 @@ package model;
 import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
+import javafx.beans.property.ReadOnlyDoubleProperty;
 
 /**
  *
@@ -91,6 +92,10 @@ public class RandomString extends Observable implements Observer {
 
     public void cancel() {
         mc.cancel();
+    }
+
+    public final ReadOnlyDoubleProperty readAllprogressProperty() {
+        return mc.readAllprogressProperty();
     }
 
     @Override

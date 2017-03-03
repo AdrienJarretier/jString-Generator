@@ -10,6 +10,7 @@ import java.util.Observable;
 import java.util.Observer;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
@@ -67,7 +68,12 @@ public class Main extends Application implements Observer {
 
         try {
 
-            rs = new RandomString(ENGLISH_WORDS_X_4, ORDER);
+            rs = new RandomString(ENGLISH_WORDS, ORDER);
+
+            ProgressBar bar = new ProgressBar();
+            bar.progressProperty().bind(rs.readAllprogressProperty());
+            bar.prefWidthProperty().bind(root.widthProperty());
+            root.setBottom(bar);
 
             rs.addObserver(this);
 

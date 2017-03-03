@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Observable;
 import java.util.Observer;
+import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.util.Pair;
 
 /**
@@ -105,6 +106,10 @@ public class MarkovChain extends Observable implements Observer {
 
     public void cancel() {
         wr.cancelTask();
+    }
+
+    public final ReadOnlyDoubleProperty readAllprogressProperty() {
+        return wr.readAllprogressProperty();
     }
 
     @Override

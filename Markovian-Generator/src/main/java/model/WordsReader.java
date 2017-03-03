@@ -26,6 +26,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Observable;
+import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.concurrent.Task;
 
 /**
@@ -104,6 +105,10 @@ public class WordsReader extends Observable {
     }
 
     private Task<Void> task;
+
+    public final ReadOnlyDoubleProperty readAllprogressProperty() {
+        return task.progressProperty();
+    }
 
     private String filename;
 
