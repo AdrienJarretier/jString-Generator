@@ -36,6 +36,7 @@ public class Main extends Application implements Observer {
     public void stop() throws Exception {
 
         rs.cancel();
+        task.cancel();
 
     }
 
@@ -62,14 +63,16 @@ public class Main extends Application implements Observer {
         String ENGLISH_SHORT = WORDS_LIST_FOLDER + "/shortEnglish.txt";
         String TOLKIEN = WORDS_LIST_FOLDER + "/tolkiensCharacters.txt";
 
+        String USED_LIST = TOLKIEN;
+
         int ORDER = 3;
 
-        mainText.getChildren().add(new Text("Analysing list for generation of a " + ORDER + "-order Markov Chain..."));
+        mainText.getChildren().add(new Text("Analysing " + USED_LIST + " list for generation of a " + ORDER + "-order Markov Chain..."));
         mainText.getChildren().add(new Text(System.getProperty("line.separator")));
 
         try {
 
-            rs = new RandomString(ENGLISH_WORDS, ORDER);
+            rs = new RandomString(USED_LIST, ORDER);
 
             ProgressBar bar = new ProgressBar();
             bar.progressProperty().bind(rs.readAllprogressProperty());
@@ -90,21 +93,46 @@ public class Main extends Application implements Observer {
 
     private TextFlow mainText;
 
+    private Task<Integer> task;
+
+    private void addLine(String word) {
+
+        StringBuilder wordSB = new StringBuilder(word);
+        wordSB.setCharAt(0, Character.toUpperCase(wordSB.charAt(0)));
+        mainText.getChildren().add(new Text(wordSB.toString()));
+        mainText.getChildren().add(new Text(System.getProperty("line.separator")));
+    }
+
     @Override
     public void update(Observable o, Object arg) {
 
         root.setBottom(new Text("Done !"));
 
-        mainText.getChildren().add(new Text("Rolling 16 words :"));
+        mainText.getChildren().add(new Text(System.getProperty("line.separator")));
+        addLine("Rolling 16 words :");
         mainText.getChildren().add(new Text(System.getProperty("line.separator")));
 
-        for (int i = 0; i < 16; ++i) {
-            StringBuilder rolled = new StringBuilder(rs.roll(50, 50));
-            rolled.setCharAt(0, Character.toUpperCase(rolled.charAt(0)));
+        task = new Task<Integer>() {
 
-            mainText.getChildren().add(new Text(rolled.toString()));
-            mainText.getChildren().add(new Text(System.getProperty("line.separator")));
-        }
+            @Override
+            protected Integer call() throws Exception {
+
+                for (int i = 0; i < 16; ++i) {
+
+                    addLine(rs.roll(5, 50));
+                    updateValue(i);
+
+                    if (isCancelled()) {
+                        updateMessage("Cancelled");
+                        break;
+                    }
+                }
+
+                return 16;
+            }
+        };
+        new Thread(task).start();
+
     }
 
 }
