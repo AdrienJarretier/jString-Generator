@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 import javafx.application.Application;
+import javafx.concurrent.Task;
 import javafx.scene.Scene;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.BorderPane;
@@ -42,8 +43,8 @@ public class Main extends Application implements Observer {
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Markovian Generator");
 
-        // en top, left, right, bottom and center
-        BorderPane root = new BorderPane();
+        // top, left, right, bottom and center
+        root = new BorderPane();
 
         // main window fixed size
         Scene scene = new Scene(root, 800, 600);
@@ -84,16 +85,21 @@ public class Main extends Application implements Observer {
 
     private RandomString rs;
 
+    // top, left, right, bottom and center
+    private BorderPane root;
+
     private TextFlow mainText;
 
     @Override
     public void update(Observable o, Object arg) {
 
+        root.setBottom(new Text("Done !"));
+
         mainText.getChildren().add(new Text("Rolling 16 words :"));
         mainText.getChildren().add(new Text(System.getProperty("line.separator")));
 
         for (int i = 0; i < 16; ++i) {
-            StringBuilder rolled = new StringBuilder(rs.roll());
+            StringBuilder rolled = new StringBuilder(rs.roll(50, 50));
             rolled.setCharAt(0, Character.toUpperCase(rolled.charAt(0)));
 
             mainText.getChildren().add(new Text(rolled.toString()));

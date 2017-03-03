@@ -78,6 +78,9 @@ public class WordsReader extends Observable {
                         updateMessage("Cancelled");
                         break;
                     }
+
+                    //counting the newline '\n'
+                    ++lettersCount;
                     updateProgress(lettersCount, file.length());
                 }
 
