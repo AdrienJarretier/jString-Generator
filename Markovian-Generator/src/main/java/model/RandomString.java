@@ -20,12 +20,15 @@
 package model;
 
 import java.io.IOException;
+import java.util.Observable;
+import java.util.Observer;
+import javafx.beans.property.ReadOnlyDoubleProperty;
 
 /**
  *
  * @author Jarretier Adrien "jarretier.adrien@gmail.com"
  */
-public class RandomString {
+public class RandomString extends Observable implements Observer {
 
     /**
         Analyses the given wordsList test file to get statistics about the order of letters in words
@@ -33,6 +36,9 @@ public class RandomString {
      **/
     public RandomString(String wordsList, int k) throws IOException {
         mc = new MarkovChain(wordsList, k);
+
+        mc.addObserver(this);
+
         order = k;
     }
 
@@ -83,4 +89,18 @@ public class RandomString {
     private MarkovChain mc;
 
     private final int order;
+
+    public void cancel() {
+        mc.cancel();
+    }
+
+    public final ReadOnlyDoubleProperty readAllprogressProperty() {
+        return mc.readAllprogressProperty();
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        setChanged();
+        notifyObservers();
+    }
 }

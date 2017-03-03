@@ -23,6 +23,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.Observable;
+import java.util.Observer;
+import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.util.Pair;
 
 /**
@@ -33,37 +36,22 @@ import javafx.util.Pair;
     Represents a k-order Markov chain
     initialized with a file containing a list of words
  **/
-public class MarkovChain {
+public class MarkovChain extends Observable implements Observer {
 
     public MarkovChain(String filename, int k) throws IOException {
         order = k;
         state = new String();
         followingLetters = new HashMap<>();
-        
+
         for (int i = 0; i < k; ++i) {
             state += '_';
         }
 
-        WordsReader wr = new WordsReader(filename);
+        wr = new WordsReader(filename);
+
+        wr.addObserver(this);
+
         wr.readAll(k);
-
-        wr.getFollowings().forEach((part, folLetters) -> {
-            // dealing with part
-            int cumulatedCount = 0;
-            // for each letter following part
-
-            followingLetters.putIfAbsent(part, new ArrayList<>());
-
-            ArrayList<Pair<Integer, Character>> l = followingLetters.get(part);
-
-            for (Entry<Character, Integer> e : folLetters.entrySet()) {
-
-                cumulatedCount += e.getValue();
-
-                l.add(new Pair<>(cumulatedCount, e.getKey()));
-            }
-
-        });
 
     }
 
@@ -113,4 +101,39 @@ public class MarkovChain {
     private int order;
 
     private String state;
+
+    private WordsReader wr;
+
+    public void cancel() {
+        wr.cancelTask();
+    }
+
+    public final ReadOnlyDoubleProperty readAllprogressProperty() {
+        return wr.readAllprogressProperty();
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+
+        wr.getFollowings().forEach((part, folLetters) -> {
+            // dealing with part
+            int cumulatedCount = 0;
+            // for each letter following part
+
+            followingLetters.putIfAbsent(part, new ArrayList<>());
+
+            ArrayList<Pair<Integer, Character>> l = followingLetters.get(part);
+
+            for (Entry<Character, Integer> e : folLetters.entrySet()) {
+
+                cumulatedCount += e.getValue();
+
+                l.add(new Pair<>(cumulatedCount, e.getKey()));
+            }
+
+        });
+
+        setChanged();
+        notifyObservers();
+    }
 }

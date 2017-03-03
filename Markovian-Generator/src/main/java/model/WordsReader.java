@@ -20,10 +20,14 @@
 package model;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Observable;
+import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.concurrent.Task;
 
 /**
  *
@@ -35,11 +39,11 @@ Opens and reads all the words inside a text file
 where each word is on a separate line.
 
  **/
-public class WordsReader {
+public class WordsReader extends Observable {
 
     public WordsReader(String filename) {
         this.filename = filename;
-        wordsCount = 0;
+        lettersCount = 0L;
         followingLetters = new HashMap<>();
     }
 
@@ -48,31 +52,62 @@ public class WordsReader {
      **/
     public void readAll(int k) throws FileNotFoundException, IOException {
 
-        followingLetters.clear();
+        task = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
 
-        BufferedReader wordList
-                = new BufferedReader(new FileReader(this.filename));
+                followingLetters.clear();
 
-        String word = new String();
-        while ((word = wordList.readLine()) != null) {
-            ++wordsCount;
+                File file = new File(filename);
 
-            WordChain wordChain = new WordChain(word, k);
+                BufferedReader wordList
+                        = new BufferedReader(new FileReader(file));
 
-            wordChain.getFollowings().forEach((part, folLetters) -> {
-                folLetters.forEach((let, count) -> {
-                    Common.incrementCount(followingLetters, part, let, count);
-                });
-            });
+                String word = new String();
+                while ((word = wordList.readLine()) != null) {
 
-        }
+                    WordChain wordChain = new WordChain(word, k);
 
-        wordList.close();
+                    wordChain.getFollowings().forEach((part, folLetters) -> {
+                        folLetters.forEach((let, count) -> {
+                            ++lettersCount;
+                            Common.incrementCount(followingLetters, part, let, count);
+                        });
+                    });
+                    if (isCancelled()) {
+                        updateMessage("Cancelled");
+                        break;
+                    }
+                    updateProgress(lettersCount, file.length());
+                }
 
+                wordList.close();
+                return null;
+            }
+
+            @Override
+            protected void succeeded() {
+                super.succeeded();
+                setChanged();
+                notifyObservers();
+            }
+        };
+        new Thread(task).start();
+
+    }
+
+    public void cancelTask() {
+        task.cancel();
     }
 
     public HashMap<String, HashMap<Character, Integer>> getFollowings() {
         return followingLetters;
+    }
+
+    private Task<Void> task;
+
+    public final ReadOnlyDoubleProperty readAllprogressProperty() {
+        return task.progressProperty();
     }
 
     private String filename;
@@ -82,5 +117,5 @@ public class WordsReader {
      */
     private HashMap<String, HashMap<Character, Integer>> followingLetters;
 
-    private int wordsCount;
+    private long lettersCount;
 }
