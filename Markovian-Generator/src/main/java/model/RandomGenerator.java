@@ -54,8 +54,11 @@ public class RandomGenerator {
     }
 
     /**
-     * Generates a uniformly distributed random unsigned int
+     * Generates a uniformly distributed random int
      *
+     * @param min inclusive
+     * @param max inclusive
+     * @return a random int uniformly ditributed between min and max
      */
     public int rollI(int min, int max) {
         return gen.nextInt(min, max);

@@ -25,7 +25,7 @@ import java.util.HashMap;
  *
  * @author Jarretier Adrien "jarretier.adrien@gmail.com"
  */
-/**
+/*
 represents a single word as a chain of order k with
     a following chars count : HashMap<String, HashMap<Character, Integer>> :
         String : any k length string in the word
@@ -63,7 +63,7 @@ word = aalii :
             ['i'] = 1
         ["ii"] =
             ['_'] = 1
- **/
+ */
 public class WordChain {
 
     public WordChain(String word, int k) {

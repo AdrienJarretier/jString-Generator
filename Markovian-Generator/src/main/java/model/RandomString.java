@@ -76,6 +76,9 @@ public class RandomString extends Observable implements Observer {
     /**
         Generates one random word using a Markov Chain
         of size in between minSize and maxSize
+     * @param minSize the minimum length acceptable
+     * @param maxSize the maximum length
+     * @return a random word which length is between minSize and maxSize
      **/
     public String roll(int minSize, int maxSize) {
         if (minSize < 1) {
