@@ -74,6 +74,10 @@ public class WordsReader extends Observable {
                             Common.incrementCount(followingLetters, part, let, count);
                         });
                     });
+
+                    // counting the newline character '\n'
+                    ++lettersCount;
+
                     if (isCancelled()) {
                         updateMessage("Cancelled");
                         break;
