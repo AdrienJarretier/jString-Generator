@@ -33,9 +33,9 @@ public class Common {
      * Increments int the HasMap the count of the given c letter
      * coming after currentPart in this world
      * 
-     * @param map    
-     * @param currentPart
-     * @param c
+     * @param map the HasMap
+     * @param currentPart part of the world we are reading
+     * @param c the letter coming after that part
      * @param count the number of times to increment, default to 1
      */
     public static void incrementCount(HashMap<String, HashMap<Character, Integer>> map, String currentPart, char c, int count) {

@@ -71,7 +71,7 @@ public class Main extends Application implements Observer {
 
         try {
 
-            rs = new RandomString(ENGLISH_WORDS, ORDER);
+            rs = RandomString.construct(ENGLISH_WORDS, ORDER);
 
             ProgressBar bar = new ProgressBar();
             bar.progressProperty().bind(rs.readAllprogressProperty());

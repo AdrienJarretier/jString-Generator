@@ -30,14 +30,23 @@ import javafx.beans.property.ReadOnlyDoubleProperty;
  */
 public class RandomString extends Observable implements Observer {
 
+    public static RandomString construct(String wordsListFile, int k) throws IOException {
+
+        RandomString rs = new RandomString(wordsListFile, k);
+
+        rs.mc.addObserver(rs);
+
+        return rs;
+    }
+
     /**
         Analyses the given wordsList test file to get statistics about the order of letters in words
         k : Order of the generated Markov chain
      **/
-    public RandomString(String wordsList, int k) throws IOException {
-        mc = new MarkovChain(wordsList, k);
+    private RandomString(String wordsList, int k) throws IOException {
+        super();
 
-        mc.addObserver(this);
+        mc = MarkovChain.construct(wordsList, k);
 
         order = k;
     }

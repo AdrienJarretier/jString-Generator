@@ -27,33 +27,30 @@ import org.junit.Test;
  * @author Jarretier Adrien "jarretier.adrien@gmail.com"
  */
 public class MarkovChainTest {
-    
+
     public MarkovChainTest() {
     }
 
     @Test
     public void display() throws IOException {
-        
+
         String filename = "resources/words-lists/shortEnglish.txt";
 
         int order = 1;
         System.out.println(order + "-order : ");
-        
+
         System.out.println("WordsReader followingLetters : ");
-        
+
         WordsReader wr = new WordsReader(filename);
 
         wr.readAll(order);
         DisplayMethods.displayMap(wr.getFollowings());
-        
-        
-        
-        
+
         System.out.println("MarkovChain followingLetters : ");
-        
-        MarkovChain mc = new MarkovChain(filename, order);
+
+        MarkovChain mc = MarkovChain.construct(filename, order);
 
         DisplayMethods.displayMapList(mc.getFollowings());
     }
-    
+
 }

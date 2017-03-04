@@ -38,7 +38,18 @@ import javafx.util.Pair;
  **/
 public class MarkovChain extends Observable implements Observer {
 
-    public MarkovChain(String filename, int k) throws IOException {
+    public static MarkovChain construct(String filename, int k) throws IOException {
+
+        MarkovChain mc = new MarkovChain(filename, k);
+
+        mc.wr.addObserver(mc);
+
+        return mc;
+    }
+
+    private MarkovChain(String filename, int k) throws IOException {
+        super();
+
         order = k;
         state = new String();
         followingLetters = new HashMap<>();
@@ -49,14 +60,12 @@ public class MarkovChain extends Observable implements Observer {
 
         wr = new WordsReader(filename);
 
-        wr.addObserver(this);
-
         wr.readAll(k);
-
     }
 
     /**
     Executes a transition and returns the new state
+     * @return the new state after the transition
      **/
     public String transition() {
 
