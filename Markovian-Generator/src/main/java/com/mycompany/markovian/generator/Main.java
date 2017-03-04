@@ -9,7 +9,10 @@ import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
@@ -43,7 +46,7 @@ public class Main extends Application implements Observer {
         primaryStage.setTitle("Markovian Generator");
 
         // en top, left, right, bottom and center
-        BorderPane root = new BorderPane();
+        root = new BorderPane();
 
         // main window fixed size
         Scene scene = new Scene(root, 800, 600);
@@ -82,23 +85,56 @@ public class Main extends Application implements Observer {
         }
     }
 
+    private void addLine(String word) {
+
+        StringBuilder wordSB = new StringBuilder(word);
+        wordSB.setCharAt(0, Character.toUpperCase(wordSB.charAt(0)));
+        mainText.getChildren().add(new Text(wordSB.toString()));
+        mainText.getChildren().add(new Text(System.getProperty("line.separator")));
+    }
+
+    private BorderPane root;
+
     private RandomString rs;
 
     private TextFlow mainText;
 
-    @Override
-    public void update(Observable o, Object arg) {
+    /**
+    Generates a list of n pseudo random words and display them in the UI
+    @param n the number of words to generate
+     */
+    private void rollWords(int n) {
 
-        mainText.getChildren().add(new Text("Rolling 16 words :"));
+        mainText.getChildren().clear();
+
+        addLine("Rolling " + n + " words :");
         mainText.getChildren().add(new Text(System.getProperty("line.separator")));
 
-        for (int i = 0; i < 16; ++i) {
+        for (int i = 0; i < n; ++i) {
             StringBuilder rolled = new StringBuilder(rs.roll());
             rolled.setCharAt(0, Character.toUpperCase(rolled.charAt(0)));
 
-            mainText.getChildren().add(new Text(rolled.toString()));
-            mainText.getChildren().add(new Text(System.getProperty("line.separator")));
+            addLine(rolled.toString());
         }
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+
+        root.setBottom(new Text("Done ! Use button on the right to generate a list of words"));
+
+        Button rollButton = new Button("Generates a list of words");
+
+        rollButton.setPrefHeight(root.getHeight());
+
+        rollButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                rollWords(20);
+            }
+        });
+        root.setRight(rollButton);
+
     }
 
 }
