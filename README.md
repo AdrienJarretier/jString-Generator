@@ -30,4 +30,5 @@ TODO :
 
 - English word list got here : https://github.com/dwyl/english-words
 - French word list : http://www.pallier.org/ressources/dicofr/dicofr.html
+- Tolkien list compiled from : http://www.behindthename.com/namesakes/list/tolkien/alpha
 
