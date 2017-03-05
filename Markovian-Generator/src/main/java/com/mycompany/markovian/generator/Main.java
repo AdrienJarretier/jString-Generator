@@ -1,7 +1,21 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * String_Generator - Text analysis for realistic random strings generation
+ *
+ * Main.java
+ * Copyright (C) 2017 Jarretier Adrien
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.mycompany.markovian.generator;
 
@@ -12,7 +26,11 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
@@ -51,7 +69,47 @@ public class Main extends Application implements Observer {
         // main window fixed size
         Scene scene = new Scene(root, 800, 600);
 
+        MenuBar menuBar = new MenuBar();
+
+        Menu menuAbout = new Menu("About");
+
+        MenuItem menuAboutAbout = new MenuItem("License");
+
+        menuAboutAbout.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Markovian-Generator - Text analysis for seemingly realistic random strings generation\n"
+                        + "\n"
+                        + "Copyright (C) 2017 Jarretier Adrien\n"
+                        + "\n"
+                        + "This program is free software: you can redistribute it and/or modify\n"
+                        + "it under the terms of the GNU General Public License as published by\n"
+                        + "the Free Software Foundation, either version 3 of the License, or\n"
+                        + "(at your option) any later version.\n"
+                        + "\n"
+                        + "This program is distributed in the hope that it will be useful,\n"
+                        + "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
+                        + "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
+                        + "GNU General Public License for more details.\n"
+                        + "\n"
+                        + "You should have received a copy of the GNU General Public License\n"
+                        + "along with this program.  If not, see <http://www.gnu.org/licenses/>.\n"
+                        + "\n"
+                        + "You can find me on github there : https://github.com/AdrienJarretier");
+
+                alert.setTitle("GNU General Public License");
+                alert.setHeaderText("GNU General Public License");
+                alert.showAndWait();
+            }
+        });
+
+        menuAbout.getItems().add(menuAboutAbout);
+
+        menuBar.getMenus().add(menuAbout);
+
         mainText = new TextFlow();
+
+        root.setTop(menuBar);
         root.setCenter(mainText);
 
         primaryStage.setScene(scene);
