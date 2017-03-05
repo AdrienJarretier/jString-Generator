@@ -20,6 +20,7 @@
 package com.mycompany.markovian.generator;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 import javafx.application.Application;
@@ -28,6 +29,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -78,7 +80,28 @@ public class Main extends Application implements Observer {
         menuAboutAbout.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Markovian-Generator - Text analysis for seemingly realistic random strings generation\n"
+                Hyperlink gnuLicences = new Hyperlink("http://www.gnu.org/licenses/");
+                Hyperlink githubProfile = new Hyperlink("https://github.com/AdrienJarretier");
+
+                // used to set the same eventHandler on each web link,
+                // that is : display the document in the default web browser
+                ArrayList<Hyperlink> webLinks = new ArrayList<>();
+                webLinks.add(gnuLicences);
+                webLinks.add(githubProfile);
+
+                for (final Hyperlink hyperlink : webLinks) {
+                    hyperlink.setOnAction(new EventHandler<ActionEvent>() {
+
+                        @Override
+                        public void handle(ActionEvent t) {
+                            getHostServices().showDocument(hyperlink.getText());
+                        }
+                    });
+                }
+
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+
+                Text alertTextPart1 = new Text("Markovian-Generator - Text analysis for seemingly realistic random strings generation\n"
                         + "\n"
                         + "Copyright (C) 2017 Jarretier Adrien\n"
                         + "\n"
@@ -92,11 +115,19 @@ public class Main extends Application implements Observer {
                         + "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
                         + "GNU General Public License for more details.\n"
                         + "\n"
-                        + "You should have received a copy of the GNU General Public License\n"
-                        + "along with this program.  If not, see <http://www.gnu.org/licenses/>.\n"
-                        + "\n"
-                        + "You can find me on github there : https://github.com/AdrienJarretier");
+                        + "You should have received a copy of the GNU General Public License\n");
 
+                TextFlow alertTextFlow = new TextFlow();
+                alertTextFlow.getChildren().add(alertTextPart1);
+
+                alertTextFlow.getChildren().add(new Text("along with this program.  If not, see <"));
+                alertTextFlow.getChildren().add(gnuLicences);
+                alertTextFlow.getChildren().add(new Text(">.\n"));
+                alertTextFlow.getChildren().add(new Text("\n"));
+                alertTextFlow.getChildren().add(new Text("You can find me on github there : "));
+                alertTextFlow.getChildren().add(githubProfile);
+
+                alert.getDialogPane().contentProperty().set(alertTextFlow);
                 alert.setTitle("GNU General Public License");
                 alert.setHeaderText("GNU General Public License");
                 alert.showAndWait();
