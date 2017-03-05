@@ -63,14 +63,17 @@ public class WordsReader extends Observable {
                 BufferedReader wordList
                         = new BufferedReader(new FileReader(file));
 
-                String word = new String();
+                String word;
+
+                long fileLength = file.length();
+
                 while ((word = wordList.readLine()) != null) {
 
                     WordChain wordChain = new WordChain(word, k);
 
                     wordChain.getFollowings().forEach((part, folLetters) -> {
+                        lettersCount += folLetters.size();
                         folLetters.forEach((let, count) -> {
-                            ++lettersCount;
                             Common.incrementCount(followingLetters, part, let, count);
                         });
                     });
@@ -82,7 +85,7 @@ public class WordsReader extends Observable {
                         updateMessage("Cancelled");
                         break;
                     }
-                    updateProgress(lettersCount, file.length());
+                    updateProgress(lettersCount, fileLength);
                 }
 
                 wordList.close();
