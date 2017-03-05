@@ -153,14 +153,16 @@ public class Main extends Application implements Observer {
         String ENGLISH_SHORT = WORDS_LIST_FOLDER + "/shortEnglish.txt";
         String TOLKIEN = WORDS_LIST_FOLDER + "/tolkiensCharacters.txt";
 
+        String USED_LIST = TOLKIEN;
+
         int ORDER = 3;
 
-        mainText.getChildren().add(new Text("Analysing list for generation of a " + ORDER + "-order Markov Chain..."));
+        mainText.getChildren().add(new Text("Analysing <" + USED_LIST + "> for generation of a " + ORDER + "-order Markov Chain..."));
         mainText.getChildren().add(new Text(System.getProperty("line.separator")));
 
         try {
 
-            rs = RandomString.construct(ENGLISH_WORDS, ORDER);
+            rs = RandomString.construct(USED_LIST, ORDER);
 
             ProgressBar bar = new ProgressBar();
             bar.progressProperty().bind(rs.readAllprogressProperty());
