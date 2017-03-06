@@ -23,8 +23,12 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -78,7 +82,7 @@ public class Main extends Application implements Observer {
         // en top, left, right, bottom and center
         root = new BorderPane();
 
-        TabPane tabPane = new TabPane();
+        tabPane = new TabPane();
         tabPane.setTabMinWidth(200);
 
         root.setCenter(tabPane);
@@ -155,8 +159,8 @@ public class Main extends Application implements Observer {
 
         root.setTop(menuBar);
 
-        tabPane.getTabs().add(new Tab("words", wordsList));
-        tabPane.getTabs().add(new Tab("image", imageView));
+        tabPane.getTabs().add(new Tab("Words", wordsList));
+        tabPane.getTabs().add(new Tab("Image", imageView));
 
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -168,6 +172,7 @@ public class Main extends Application implements Observer {
     }
 
     private BorderPane root;
+    private TabPane tabPane;
 
     private WordsList wordsList;
     private ImageView imageView;
@@ -177,7 +182,16 @@ public class Main extends Application implements Observer {
 
         root.setBottom(new Text("Done ! Use button on the right to generate a list of words"));
 
-        Button rollButton = new Button("Generates a list of words");
+        String buttonPrefix = "Generate ";
+        Button rollButton = new Button(buttonPrefix + tabPane.getSelectionModel().getSelectedItem().getText());
+
+        tabPane.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>() {
+            @Override
+            public void changed(ObservableValue<? extends Tab> observable, Tab oldValue, Tab newValue) {
+                rollButton.setText(buttonPrefix + newValue.getText());
+                rollButton.setMinWidth(rollButton.getWidth());
+            }
+        });
 
         rollButton.setPrefHeight(root.getHeight());
 
