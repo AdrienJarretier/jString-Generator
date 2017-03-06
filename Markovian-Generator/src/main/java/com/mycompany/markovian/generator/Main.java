@@ -19,7 +19,6 @@
  */
 package com.mycompany.markovian.generator;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
@@ -40,7 +39,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
-import model.RandomString;
+import view.ImageView;
 import view.WordsList;
 
 /**
@@ -68,6 +67,8 @@ public class Main extends Application implements Observer {
     public void init() throws Exception {
         wordsList = new WordsList();
         wordsList.addObserver(this);
+
+        imageView = new ImageView();
     }
 
     @Override
@@ -78,6 +79,7 @@ public class Main extends Application implements Observer {
         root = new BorderPane();
 
         TabPane tabPane = new TabPane();
+        tabPane.setTabMinWidth(200);
 
         root.setCenter(tabPane);
 
@@ -154,7 +156,7 @@ public class Main extends Application implements Observer {
         root.setTop(menuBar);
 
         tabPane.getTabs().add(new Tab("words", wordsList));
-//        root.setCenter(mainText);
+        tabPane.getTabs().add(new Tab("image", imageView));
 
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -168,6 +170,7 @@ public class Main extends Application implements Observer {
     private BorderPane root;
 
     private WordsList wordsList;
+    private ImageView imageView;
 
     @Override
     public void update(Observable o, Object arg) {
