@@ -34,8 +34,6 @@ import model.RandomString;
  */
 public class WordsList extends TextFlow implements RootCenterGeneratedContent {
 
-    private WordsList mainText = this;
-
     private RandomString rs;
 
     public final ReadOnlyDoubleProperty readAllprogressProperty() {
@@ -56,8 +54,8 @@ public class WordsList extends TextFlow implements RootCenterGeneratedContent {
 
         int ORDER = 3;
 
-        mainText.getChildren().add(new Text("Analysing <" + USED_LIST + "> for generation of a " + ORDER + "-order Markov Chain..."));
-        mainText.getChildren().add(new Text(System.getProperty("line.separator")));
+        getChildren().add(new Text("Analysing <" + USED_LIST + "> for generation of a " + ORDER + "-order Markov Chain..."));
+        getChildren().add(new Text(System.getProperty("line.separator")));
 
         try {
 
@@ -77,8 +75,8 @@ public class WordsList extends TextFlow implements RootCenterGeneratedContent {
 
         StringBuilder wordSB = new StringBuilder(word);
         wordSB.setCharAt(0, Character.toUpperCase(wordSB.charAt(0)));
-        mainText.getChildren().add(new Text(wordSB.toString()));
-        mainText.getChildren().add(new Text(System.getProperty("line.separator")));
+        getChildren().add(new Text(wordSB.toString()));
+        getChildren().add(new Text(System.getProperty("line.separator")));
     }
 
     /**
@@ -87,10 +85,10 @@ public class WordsList extends TextFlow implements RootCenterGeneratedContent {
      */
     public void rollWords(int n) {
 
-        mainText.getChildren().clear();
+        getChildren().clear();
 
         addLine("Rolling " + n + " words :");
-        mainText.getChildren().add(new Text(System.getProperty("line.separator")));
+        getChildren().add(new Text(System.getProperty("line.separator")));
 
         for (int i = 0; i < n; ++i) {
             StringBuilder rolled = rs.roll();

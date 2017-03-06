@@ -185,6 +185,7 @@ public class Main extends Application implements Observer {
 
         String buttonPrefix = "Generate ";
         Button rollButton = new Button(buttonPrefix + tabPane.getSelectionModel().getSelectedItem().getText());
+        rollButton.setOnAction(((RootCenterGeneratedContent) tabPane.getSelectionModel().getSelectedItem().getContent()).onRollButtonAction());
 
         tabPane.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>() {
             @Override
