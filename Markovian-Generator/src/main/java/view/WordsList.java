@@ -50,7 +50,7 @@ public class WordsList extends TextFlow implements RootCenterGeneratedContent {
         String ENGLISH_SHORT = WORDS_LIST_FOLDER + "/shortEnglish.txt";
         String TOLKIEN = WORDS_LIST_FOLDER + "/tolkiensCharacters.txt";
 
-        String USED_LIST = TOLKIEN;
+        String USED_LIST = ENGLISH_SHORT;
 
         int ORDER = 3;
 
