@@ -202,7 +202,7 @@ public class Main extends Application implements Observer {
         mainText.getChildren().add(new Text(System.getProperty("line.separator")));
 
         for (int i = 0; i < n; ++i) {
-            StringBuilder rolled = new StringBuilder(rs.roll());
+            StringBuilder rolled = rs.roll();
             rolled.setCharAt(0, Character.toUpperCase(rolled.charAt(0)));
 
             addLine(rolled.toString());

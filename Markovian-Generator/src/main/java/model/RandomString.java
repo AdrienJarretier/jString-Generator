@@ -55,7 +55,7 @@ public class RandomString extends Observable implements Observer {
      * Generates one random word using a Markov Chain
      * @return The generated String
      */
-    public String roll() {
+    public StringBuilder roll() {
 
         StringBuilder word;
 
@@ -70,7 +70,7 @@ public class RandomString extends Observable implements Observer {
 
         word.deleteCharAt(word.length() - 1);
 
-        return word.toString();
+        return word;
     }
 
     /**
@@ -80,7 +80,7 @@ public class RandomString extends Observable implements Observer {
      * @param maxSize the maximum length
      * @return a random word which length is between minSize and maxSize
      **/
-    public String roll(int minSize, int maxSize) {
+    public StringBuilder roll(int minSize, int maxSize) {
         if (minSize < 1) {
             throw new IllegalArgumentException("minSize should be greater than 0");
         }
@@ -88,14 +88,14 @@ public class RandomString extends Observable implements Observer {
         if (maxSize < minSize) {
             throw new IllegalArgumentException("maxSize should be greater than minSize");
         }
-        String word;
+        StringBuilder word;
         do {
 
             word = roll();
 
         } while (minSize > word.length() || word.length() > maxSize);
 
-        return word.toString();
+        return word;
     }
 
     private MarkovChain mc;
