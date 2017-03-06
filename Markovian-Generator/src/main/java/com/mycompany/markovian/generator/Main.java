@@ -161,6 +161,9 @@ public class Main extends Application implements Observer {
         root.setTop(menuBar);
 
         tabPane.getTabs().add(new Tab("Words", wordsList));
+        imageView.fitWidthProperty().bind(tabPane.widthProperty());
+        imageView.fitHeightProperty().bind(tabPane.heightProperty());
+        imageView.setPreserveRatio(true);
         tabPane.getTabs().add(new Tab("Image", imageView));
 
         primaryStage.setScene(scene);

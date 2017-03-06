@@ -21,6 +21,7 @@ package view;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.image.Image;
 
 /**
  *
@@ -37,6 +38,10 @@ public class ImageView extends javafx.scene.image.ImageView implements RootCente
         return new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
+
+                Image img = new Image("file:resources/imgs/wallpaper-48432.jpg");
+                setImage(img);
+
             }
         };
     }
