@@ -34,11 +34,14 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import model.RandomString;
+import view.WordsList;
 
 /**
  *
@@ -57,8 +60,14 @@ public class Main extends Application implements Observer {
     @Override
     public void stop() throws Exception {
 
-        rs.cancel();
+        wordsList.cancel();
 
+    }
+
+    @Override
+    public void init() throws Exception {
+        wordsList = new WordsList();
+        wordsList.addObserver(this);
     }
 
     @Override
@@ -67,6 +76,10 @@ public class Main extends Application implements Observer {
 
         // en top, left, right, bottom and center
         root = new BorderPane();
+
+        TabPane tabPane = new TabPane();
+
+        root.setCenter(tabPane);
 
         // main window fixed size
         Scene scene = new Scene(root, 800, 600);
@@ -138,76 +151,23 @@ public class Main extends Application implements Observer {
 
         menuBar.getMenus().add(menuAbout);
 
-        mainText = new TextFlow();
-
         root.setTop(menuBar);
-        root.setCenter(mainText);
+
+        tabPane.getTabs().add(new Tab("words", wordsList));
+//        root.setCenter(mainText);
 
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        String WORDS_LIST_FOLDER = "resources/words-lists";
-        String ENGLISH_WORDS = WORDS_LIST_FOLDER + "/english.txt";
-        String ENGLISH_WORDS_X_4 = WORDS_LIST_FOLDER + "/englishx4.txt";
-        String FRENCH_WORDS = WORDS_LIST_FOLDER + "/liste.de.mots.francais.frgut.txt";
-        String ENGLISH_SHORT = WORDS_LIST_FOLDER + "/shortEnglish.txt";
-        String TOLKIEN = WORDS_LIST_FOLDER + "/tolkiensCharacters.txt";
-
-        String USED_LIST = TOLKIEN;
-
-        int ORDER = 3;
-
-        mainText.getChildren().add(new Text("Analysing <" + USED_LIST + "> for generation of a " + ORDER + "-order Markov Chain..."));
-        mainText.getChildren().add(new Text(System.getProperty("line.separator")));
-
-        try {
-
-            rs = RandomString.construct(USED_LIST, ORDER);
-
-            ProgressBar bar = new ProgressBar();
-            bar.progressProperty().bind(rs.readAllprogressProperty());
-            bar.prefWidthProperty().bind(root.widthProperty());
-            root.setBottom(bar);
-
-            rs.addObserver(this);
-
-        } catch (IOException ex) {
-            System.err.println(ex.getMessage());
-        }
-    }
-
-    private void addLine(String word) {
-
-        StringBuilder wordSB = new StringBuilder(word);
-        wordSB.setCharAt(0, Character.toUpperCase(wordSB.charAt(0)));
-        mainText.getChildren().add(new Text(wordSB.toString()));
-        mainText.getChildren().add(new Text(System.getProperty("line.separator")));
+        ProgressBar bar = new ProgressBar();
+        bar.progressProperty().bind(wordsList.readAllprogressProperty());
+        bar.prefWidthProperty().bind(root.widthProperty());
+        root.setBottom(bar);
     }
 
     private BorderPane root;
 
-    private RandomString rs;
-
-    private TextFlow mainText;
-
-    /**
-    Generates a list of n pseudo random words and display them in the UI
-    @param n the number of words to generate
-     */
-    private void rollWords(int n) {
-
-        mainText.getChildren().clear();
-
-        addLine("Rolling " + n + " words :");
-        mainText.getChildren().add(new Text(System.getProperty("line.separator")));
-
-        for (int i = 0; i < n; ++i) {
-            StringBuilder rolled = rs.roll();
-            rolled.setCharAt(0, Character.toUpperCase(rolled.charAt(0)));
-
-            addLine(rolled.toString());
-        }
-    }
+    private WordsList wordsList;
 
     @Override
     public void update(Observable o, Object arg) {
@@ -221,7 +181,7 @@ public class Main extends Application implements Observer {
         rollButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                rollWords(20);
+                wordsList.rollWords(20);
             }
         });
         root.setRight(rollButton);
