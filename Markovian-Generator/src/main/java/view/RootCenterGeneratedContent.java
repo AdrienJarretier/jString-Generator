@@ -1,7 +1,7 @@
 /*
  * String_Generator - Text analysis for realistic random strings generation
  * 
- * ImageView.java
+ * RootCenterGeneratedContent.java
  * Copyright (C) 2017 Jarretier Adrien
  *
  * This program is free software: you can redistribute it and/or modify
@@ -26,19 +26,7 @@ import javafx.event.EventHandler;
  *
  * @author Jarretier Adrien "jarretier.adrien@gmail.com"
  */
-public class ImageView extends javafx.scene.image.ImageView implements RootCenterGeneratedContent {
+public interface RootCenterGeneratedContent {
 
-    public ImageView() {
-        super();
-    }
-
-    @Override
-    public EventHandler<ActionEvent> onRollButtonAction() {
-        return new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-            }
-        };
-    }
-
+    EventHandler<ActionEvent> onRollButtonAction();
 }

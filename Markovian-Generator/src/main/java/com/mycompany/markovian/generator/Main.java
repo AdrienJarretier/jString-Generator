@@ -44,6 +44,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import view.ImageView;
+import view.RootCenterGeneratedContent;
 import view.WordsList;
 
 /**
@@ -190,17 +191,12 @@ public class Main extends Application implements Observer {
             public void changed(ObservableValue<? extends Tab> observable, Tab oldValue, Tab newValue) {
                 rollButton.setText(buttonPrefix + newValue.getText());
                 rollButton.setMinWidth(rollButton.getWidth());
+
+                rollButton.setOnAction(((RootCenterGeneratedContent) newValue.getContent()).onRollButtonAction());
             }
         });
 
         rollButton.setPrefHeight(root.getHeight());
-
-        rollButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                wordsList.rollWords(20);
-            }
-        });
         root.setRight(rollButton);
 
     }

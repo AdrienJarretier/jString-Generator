@@ -22,6 +22,8 @@ package view;
 import java.io.IOException;
 import java.util.Observer;
 import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import model.RandomString;
@@ -30,7 +32,7 @@ import model.RandomString;
  *
  * @author Jarretier Adrien "jarretier.adrien@gmail.com"
  */
-public class WordsList extends TextFlow {
+public class WordsList extends TextFlow implements RootCenterGeneratedContent {
 
     private WordsList mainText = this;
 
@@ -100,5 +102,15 @@ public class WordsList extends TextFlow {
 
     public void cancel() {
         rs.cancel();
+    }
+
+    @Override
+    public EventHandler<ActionEvent> onRollButtonAction() {
+        return new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                rollWords(20);
+            }
+        };
     }
 }
