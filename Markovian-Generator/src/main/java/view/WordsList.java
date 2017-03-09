@@ -22,19 +22,22 @@ package view;
 import java.io.IOException;
 import java.util.Observer;
 import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
+import javafx.scene.control.ListView;
 import model.RandomString;
 
 /**
  *
  * @author Jarretier Adrien "jarretier.adrien@gmail.com"
  */
-public class WordsList extends TextFlow implements RootCenterGeneratedContent {
+public class WordsList extends ListView<String> implements RootCenterGeneratedContent {
 
     private RandomString rs;
+
+    private ObservableList<String> names;
 
     public final ReadOnlyDoubleProperty readAllprogressProperty() {
         return rs.readAllprogressProperty();
@@ -43,6 +46,10 @@ public class WordsList extends TextFlow implements RootCenterGeneratedContent {
     public WordsList() {
         super();
 
+        names = FXCollections.observableArrayList();
+
+        setItems(names);
+
         String WORDS_LIST_FOLDER = "resources/words-lists";
         String ENGLISH_WORDS = WORDS_LIST_FOLDER + "/english.txt";
         String ENGLISH_WORDS_X_4 = WORDS_LIST_FOLDER + "/englishx4.txt";
@@ -50,12 +57,11 @@ public class WordsList extends TextFlow implements RootCenterGeneratedContent {
         String ENGLISH_SHORT = WORDS_LIST_FOLDER + "/shortEnglish.txt";
         String TOLKIEN = WORDS_LIST_FOLDER + "/tolkiensCharacters.txt";
 
-        String USED_LIST = TOLKIEN;
+        String USED_LIST = ENGLISH_WORDS;
 
         int ORDER = 3;
 
-        getChildren().add(new Text("Analysing <" + USED_LIST + "> for generation of a " + ORDER + "-order Markov Chain..."));
-        getChildren().add(new Text(System.getProperty("line.separator")));
+        names.add("Analysing <" + USED_LIST + "> for generation of a " + ORDER + "-order Markov Chain...");
 
         try {
 
@@ -67,6 +73,11 @@ public class WordsList extends TextFlow implements RootCenterGeneratedContent {
 
     }
 
+    public WordsList(ObservableList<String> names, ObservableList<String> items) {
+        super(items);
+        this.names = names;
+    }
+
     public synchronized void addObserver(Observer o) {
         rs.addObserver(o);
     }
@@ -75,8 +86,7 @@ public class WordsList extends TextFlow implements RootCenterGeneratedContent {
 
         StringBuilder wordSB = new StringBuilder(word);
         wordSB.setCharAt(0, Character.toUpperCase(wordSB.charAt(0)));
-        getChildren().add(new Text(wordSB.toString()));
-        getChildren().add(new Text(System.getProperty("line.separator")));
+        names.add(wordSB.toString());
     }
 
     /**
@@ -85,10 +95,9 @@ public class WordsList extends TextFlow implements RootCenterGeneratedContent {
      */
     public void rollWords(int n) {
 
-        getChildren().clear();
+        names.clear();
 
         addLine("Rolling " + n + " words :");
-        getChildren().add(new Text(System.getProperty("line.separator")));
 
         for (int i = 0; i < n; ++i) {
             StringBuilder rolled = rs.roll();
