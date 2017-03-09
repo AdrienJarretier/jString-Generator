@@ -69,10 +69,6 @@ public class Main extends Application implements Observer {
 
     @Override
     public void init() throws Exception {
-        wordsList = new WordsList();
-        wordsList.addObserver(this);
-
-        imageView = new ImageView();
     }
 
     @Override
@@ -159,11 +155,16 @@ public class Main extends Application implements Observer {
 
         root.setTop(menuBar);
 
-        tabPane.getTabs().add(new Tab("Words", wordsList));
-        tabPane.getTabs().add(new Tab("Image", imageView));
-
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        wordsList = new WordsList();
+        wordsList.addObserver(this);
+
+        imageView = new ImageView();
+
+        tabPane.getTabs().add(new Tab("Words", wordsList));
+        tabPane.getTabs().add(new Tab("Image", imageView));
 
         ProgressBar bar = new ProgressBar();
         bar.progressProperty().bind(wordsList.readAllprogressProperty());
@@ -186,7 +187,9 @@ public class Main extends Application implements Observer {
             case FAILED:
 
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText(task.getException().getMessage());
+                Text errorText = new Text(task.getException().getMessage());
+                TextFlow textFlow = new TextFlow(errorText);
+                alert.getDialogPane().contentProperty().set(textFlow);
                 alert.showAndWait();
                 break;
 
