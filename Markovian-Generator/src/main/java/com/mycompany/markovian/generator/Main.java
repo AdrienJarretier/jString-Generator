@@ -25,10 +25,9 @@ import java.util.Observer;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -181,24 +180,38 @@ public class Main extends Application implements Observer {
     @Override
     public void update(Observable o, Object arg) {
 
-        root.setBottom(new Text("Done ! Use button on the right to generate a list of words"));
+        Task<Void> task = (Task<Void>) arg;
 
-        String buttonPrefix = "Generate ";
-        Button rollButton = new Button(buttonPrefix + tabPane.getSelectionModel().getSelectedItem().getText());
-        rollButton.setOnAction(((RootCenterGeneratedContent) tabPane.getSelectionModel().getSelectedItem().getContent()).onRollButtonAction());
+        switch (task.getState()) {
+            case FAILED:
 
-        tabPane.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>() {
-            @Override
-            public void changed(ObservableValue<? extends Tab> observable, Tab oldValue, Tab newValue) {
-                rollButton.setText(buttonPrefix + newValue.getText());
-                rollButton.setMinWidth(rollButton.getWidth());
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText(task.getException().getMessage());
+                alert.showAndWait();
+                break;
 
-                rollButton.setOnAction(((RootCenterGeneratedContent) newValue.getContent()).onRollButtonAction());
-            }
-        });
+            case SUCCEEDED:
 
-        rollButton.setPrefHeight(root.getHeight());
-        root.setRight(rollButton);
+                root.setBottom(new Text("Done ! Use button on the right to generate a list of words"));
+
+                String buttonPrefix = "Generate ";
+                Button rollButton = new Button(buttonPrefix + tabPane.getSelectionModel().getSelectedItem().getText());
+                rollButton.setOnAction(((RootCenterGeneratedContent) tabPane.getSelectionModel().getSelectedItem().getContent()).onRollButtonAction());
+
+                tabPane.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Tab> observable, Tab oldValue, Tab newValue) {
+                        rollButton.setText(buttonPrefix + newValue.getText());
+                        rollButton.setMinWidth(rollButton.getWidth());
+
+                        rollButton.setOnAction(((RootCenterGeneratedContent) newValue.getContent()).onRollButtonAction());
+                    }
+                });
+
+                rollButton.setPrefHeight(root.getHeight());
+                root.setRight(rollButton);
+                break;
+        }
 
     }
 

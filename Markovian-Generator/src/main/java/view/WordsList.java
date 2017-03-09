@@ -19,7 +19,6 @@
  */
 package view;
 
-import java.io.IOException;
 import java.util.Observer;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.collections.FXCollections;
@@ -63,13 +62,7 @@ public class WordsList extends ListView<String> implements RootCenterGeneratedCo
 
         names.add("Analysing <" + USED_LIST + "> for generation of a " + ORDER + "-order Markov Chain...");
 
-        try {
-
-            rs = RandomString.construct(USED_LIST, ORDER);
-
-        } catch (IOException ex) {
-            System.err.println(ex.getMessage());
-        }
+        rs = RandomString.construct(USED_LIST, ORDER);
 
     }
 

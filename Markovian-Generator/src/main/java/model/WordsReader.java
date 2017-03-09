@@ -22,8 +22,6 @@ package model;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
@@ -52,11 +50,11 @@ public class WordsReader extends Observable {
     /**
     reads the file and fill in the maps
      **/
-    public void readAll(int k) throws FileNotFoundException, IOException {
+    public void readAll(int k) {
 
         task = new Task<Void>() {
             @Override
-            protected Void call() throws Exception {
+            protected Void call() throws IOException {
 
                 followingLetters.clear();
 
@@ -98,8 +96,16 @@ public class WordsReader extends Observable {
             protected void succeeded() {
                 super.succeeded();
                 setChanged();
-                notifyObservers();
+                notifyObservers(task);
             }
+
+            @Override
+            protected void failed() {
+                super.failed(); //To change body of generated methods, choose Tools | Templates.
+                setChanged();
+                notifyObservers(task);
+            }
+
         };
         new Thread(task).start();
 

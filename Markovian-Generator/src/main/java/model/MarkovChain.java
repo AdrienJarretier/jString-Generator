@@ -26,6 +26,7 @@ import java.util.Map.Entry;
 import java.util.Observable;
 import java.util.Observer;
 import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.concurrent.Task;
 import javafx.util.Pair;
 
 /**
@@ -38,7 +39,7 @@ import javafx.util.Pair;
  **/
 public class MarkovChain extends Observable implements Observer {
 
-    public static MarkovChain construct(String filename, int k) throws IOException {
+    public static MarkovChain construct(String filename, int k) {
 
         MarkovChain mc = new MarkovChain(filename, k);
 
@@ -47,7 +48,7 @@ public class MarkovChain extends Observable implements Observer {
         return mc;
     }
 
-    private MarkovChain(String filename, int k) throws IOException {
+    private MarkovChain(String filename, int k) {
         super();
 
         order = k;
@@ -124,25 +125,36 @@ public class MarkovChain extends Observable implements Observer {
     @Override
     public void update(Observable o, Object arg) {
 
-        wr.getFollowings().forEach((part, folLetters) -> {
-            // dealing with part
-            int cumulatedCount = 0;
-            // for each letter following part
+        switch (((Task<Void>) arg).getState()) {
+            case FAILED:
 
-            followingLetters.putIfAbsent(part, new ArrayList<>());
+                setChanged();
+                notifyObservers(arg);
+                break;
 
-            ArrayList<Pair<Integer, Character>> l = followingLetters.get(part);
+            case SUCCEEDED:
 
-            for (Entry<Character, Integer> e : folLetters.entrySet()) {
+                wr.getFollowings().forEach((part, folLetters) -> {
+                    // dealing with part
+                    int cumulatedCount = 0;
+                    // for each letter following part
 
-                cumulatedCount += e.getValue();
+                    followingLetters.putIfAbsent(part, new ArrayList<>());
 
-                l.add(new Pair<>(cumulatedCount, e.getKey()));
-            }
+                    ArrayList<Pair<Integer, Character>> l = followingLetters.get(part);
 
-        });
+                    for (Entry<Character, Integer> e : folLetters.entrySet()) {
 
-        setChanged();
-        notifyObservers();
+                        cumulatedCount += e.getValue();
+
+                        l.add(new Pair<>(cumulatedCount, e.getKey()));
+                    }
+
+                });
+
+                setChanged();
+                notifyObservers(arg);
+                break;
+        }
     }
 }
