@@ -19,6 +19,7 @@
  */
 package view;
 
+import java.io.File;
 import java.util.Observer;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.collections.FXCollections;
@@ -49,7 +50,9 @@ public class WordsList extends ListView<String> implements RootCenterGeneratedCo
 
         setItems(names);
 
-        String WORDS_LIST_FOLDER = "resources/words-lists";
+        String WORKING_DIR = new File(this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath()).getParent();
+
+        String WORDS_LIST_FOLDER = WORKING_DIR + "/resources/words-lists";
         String ENGLISH_WORDS = WORDS_LIST_FOLDER + "/english.txt";
         String ENGLISH_WORDS_X_4 = WORDS_LIST_FOLDER + "/englishx4.txt";
         String FRENCH_WORDS = WORDS_LIST_FOLDER + "/liste.de.mots.francais.frgut.txt";

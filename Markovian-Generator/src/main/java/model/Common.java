@@ -30,7 +30,7 @@ import java.util.HashMap;
 public class Common {
 
     /**
-     * Increments int the HasMap the count of the given c letter
+     * Increments in the HashMap the count of the given c letter
      * coming after currentPart in this world
      * 
      * @param map the HasMap

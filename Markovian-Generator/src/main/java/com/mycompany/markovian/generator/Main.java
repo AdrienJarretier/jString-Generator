@@ -164,7 +164,7 @@ public class Main extends Application implements Observer {
         imageView = new ImageView();
 
         tabPane.getTabs().add(new Tab("Words", wordsList));
-        tabPane.getTabs().add(new Tab("Image", imageView));
+//        tabPane.getTabs().add(new Tab("Image", imageView));
 
         ProgressBar bar = new ProgressBar();
         bar.progressProperty().bind(wordsList.readAllprogressProperty());
