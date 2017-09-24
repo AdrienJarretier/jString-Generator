@@ -27,17 +27,19 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.Background;
 import model.RandomString;
 
 /**
  *
  * @author Jarretier Adrien "jarretier.adrien@gmail.com"
  */
-public class WordsList extends ListView<String> implements RootCenterGeneratedContent {
+public class WordsList extends ListView<TextField> implements RootCenterGeneratedContent {
 
     private RandomString rs;
 
-    private ObservableList<String> names;
+    private ObservableList<TextField> names;
 
     public final ReadOnlyDoubleProperty readAllprogressProperty() {
         return rs.readAllprogressProperty();
@@ -63,13 +65,18 @@ public class WordsList extends ListView<String> implements RootCenterGeneratedCo
 
         int ORDER = 3;
 
-        names.add("Analysing <" + USED_LIST + "> for generation of a " + ORDER + "-order Markov Chain...");
+        TextField tf = new TextField("Analysing <" + USED_LIST + "> for generation of a " + ORDER + "-order Markov Chain...");
+        tf.setEditable(false);
+        tf.setBackground(Background.EMPTY);
+        names.add(tf);
+
+        setFixedCellSize(22);
 
         rs = RandomString.construct(USED_LIST, ORDER);
 
     }
 
-    public WordsList(ObservableList<String> names, ObservableList<String> items) {
+    public WordsList(ObservableList<TextField> names, ObservableList<TextField> items) {
         super(items);
         this.names = names;
     }
@@ -82,7 +89,10 @@ public class WordsList extends ListView<String> implements RootCenterGeneratedCo
 
         StringBuilder wordSB = new StringBuilder(word);
         wordSB.setCharAt(0, Character.toUpperCase(wordSB.charAt(0)));
-        names.add(wordSB.toString());
+        TextField tf = new TextField(wordSB.toString());
+        tf.setEditable(false);
+        tf.setBackground(Background.EMPTY);
+        names.add(tf);
     }
 
     /**
@@ -94,6 +104,7 @@ public class WordsList extends ListView<String> implements RootCenterGeneratedCo
         names.clear();
 
         addLine("Rolling " + n + " words :");
+        addLine(" ");
 
         for (int i = 0; i < n; ++i) {
             StringBuilder rolled = rs.roll();
