@@ -11,7 +11,7 @@ the dependancy should be handled automatically by Maven in NetBeans.
 
 
 When starting it will first read a list of words and construct a 3-order Markov Chain
-it is possible to change very easily those 2 parameters in the main,
+it is possible to change very easily those 2 parameters in WordsList.java,
 by default the program reads resources/words-lists/english.txt so you can use this filename if you want to use another list.
 
 Once the chain is generated you can click on the button on the right to generate words over and over again.
