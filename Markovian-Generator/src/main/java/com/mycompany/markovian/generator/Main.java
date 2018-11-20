@@ -151,7 +151,11 @@ public class Main extends Application implements Observer {
 
         imageView = new ImageView();
 
-        tabPane.getTabs().add(new Tab("Words", wordsList));
+        String fName = wordsFile.getName();
+
+        fName = fName.substring(0, fName.lastIndexOf('.'));
+
+        tabPane.getTabs().add(new Tab(fName, wordsList));
 //        tabPane.getTabs().add(new Tab("Image", imageView));
 
         ProgressBar bar = new ProgressBar();
