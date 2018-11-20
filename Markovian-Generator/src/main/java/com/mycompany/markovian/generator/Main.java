@@ -19,12 +19,16 @@
  */
 package com.mycompany.markovian.generator;
 
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -41,6 +45,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import view.ImageView;
 import view.RootCenterGeneratedContent;
@@ -71,22 +76,7 @@ public class Main extends Application implements Observer {
     public void init() throws Exception {
     }
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        primaryStage.setTitle("Markovian Generator");
-
-        // en top, left, right, bottom and center
-        root = new BorderPane();
-
-        tabPane = new TabPane();
-        tabPane.setTabMinWidth(200);
-
-        root.setCenter(tabPane);
-
-        // main window fixed size
-        Scene scene = new Scene(root, 800, 600);
-
-        MenuBar menuBar = new MenuBar();
+    private void addMenuAbout(ObservableList<Menu> menus) {
 
         Menu menuAbout = new Menu("About");
 
@@ -151,7 +141,67 @@ public class Main extends Application implements Observer {
 
         menuAbout.getItems().add(menuAboutAbout);
 
-        menuBar.getMenus().add(menuAbout);
+        menus.add(menuAbout);
+    }
+
+    private void addMenuFile(ObservableList<Menu> menus, Stage primaryStage) {
+
+        Menu menu = new Menu("File");
+
+        MenuItem menuItem = new MenuItem("Open");
+
+        menuItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+
+                String WORKING_DIR = new File(this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath()).getParent();
+
+                Path wordsListPath = Paths.get(WORKING_DIR, "resources", "words-lists");
+
+                File initDir = new File(wordsListPath.toString());
+
+                FileChooser fileChooser = new FileChooser();
+
+                fileChooser.setInitialDirectory(initDir);
+
+                try {
+                    fileChooser.showOpenDialog(primaryStage);
+                } catch (IllegalArgumentException iex) {
+
+                    fileChooser.setInitialDirectory(new File(WORKING_DIR));
+                    fileChooser.showOpenDialog(primaryStage);
+
+                }
+
+            }
+        });
+
+        menu.getItems().add(menuItem);
+
+        menus.add(menu);
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        primaryStage.setTitle("Markovian Generator");
+
+        // en top, left, right, bottom and center
+        root = new BorderPane();
+
+        tabPane = new TabPane();
+        tabPane.setTabMinWidth(200);
+
+        root.setCenter(tabPane);
+
+        // main window fixed size
+        Scene scene = new Scene(root, 800, 600);
+
+        MenuBar menuBar = new MenuBar();
+
+        ObservableList<Menu> menus = menuBar.getMenus();
+
+        addMenuFile(menus, primaryStage);
+        addMenuAbout(menus);
 
         root.setTop(menuBar);
 
