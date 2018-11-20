@@ -45,23 +45,23 @@ public class WordsList extends ListView<TextField> implements RootCenterGenerate
         return rs.readAllprogressProperty();
     }
 
-    public WordsList() {
+    public WordsList(String USED_LIST) {
         super();
 
         names = FXCollections.observableArrayList();
 
         setItems(names);
 
-        String WORKING_DIR = new File(this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath()).getParent();
-
-        String WORDS_LIST_FOLDER = WORKING_DIR + "/resources/words-lists";
-        String ENGLISH_WORDS = WORDS_LIST_FOLDER + "/english.txt";
-        String ENGLISH_WORDS_X_4 = WORDS_LIST_FOLDER + "/englishx4.txt";
-        String FRENCH_WORDS = WORDS_LIST_FOLDER + "/liste.de.mots.francais.frgut.txt";
-        String ENGLISH_SHORT = WORDS_LIST_FOLDER + "/shortEnglish.txt";
-        String TOLKIEN = WORDS_LIST_FOLDER + "/tolkiensCharacters.txt";
-
-        String USED_LIST = ENGLISH_WORDS;
+//        String WORKING_DIR = new File(this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath()).getParent();
+//
+//        String WORDS_LIST_FOLDER = WORKING_DIR + "/resources/words-lists";
+//        String ENGLISH_WORDS = WORDS_LIST_FOLDER + "/english.txt";
+//        String ENGLISH_WORDS_X_4 = WORDS_LIST_FOLDER + "/englishx4.txt";
+//        String FRENCH_WORDS = WORDS_LIST_FOLDER + "/liste.de.mots.francais.frgut.txt";
+//        String ENGLISH_SHORT = WORDS_LIST_FOLDER + "/shortEnglish.txt";
+//        String TOLKIEN = WORDS_LIST_FOLDER + "/tolkiensCharacters.txt";
+//
+//        String USED_LIST = ENGLISH_WORDS;
 
         int ORDER = 3;
 

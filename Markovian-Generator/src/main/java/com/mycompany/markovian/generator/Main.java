@@ -144,6 +144,23 @@ public class Main extends Application implements Observer {
         menus.add(menuAbout);
     }
 
+    private void loadWords(File wordsFile) {
+
+        wordsList = new WordsList(wordsFile.getPath());
+        wordsList.addObserver(this);
+
+        imageView = new ImageView();
+
+        tabPane.getTabs().add(new Tab("Words", wordsList));
+//        tabPane.getTabs().add(new Tab("Image", imageView));
+
+        ProgressBar bar = new ProgressBar();
+        bar.progressProperty().bind(wordsList.readAllprogressProperty());
+        bar.prefWidthProperty().bind(root.widthProperty());
+        root.setBottom(bar);
+
+    }
+
     private void addMenuFile(ObservableList<Menu> menus, Stage primaryStage) {
 
         Menu menu = new Menu("File");
@@ -164,14 +181,18 @@ public class Main extends Application implements Observer {
 
                 fileChooser.setInitialDirectory(initDir);
 
+                File openedFile;
+
                 try {
-                    fileChooser.showOpenDialog(primaryStage);
+                    openedFile = fileChooser.showOpenDialog(primaryStage);
                 } catch (IllegalArgumentException iex) {
 
                     fileChooser.setInitialDirectory(new File(WORKING_DIR));
-                    fileChooser.showOpenDialog(primaryStage);
+                    openedFile = fileChooser.showOpenDialog(primaryStage);
 
                 }
+
+                loadWords(openedFile);
 
             }
         });
@@ -207,19 +228,6 @@ public class Main extends Application implements Observer {
 
         primaryStage.setScene(scene);
         primaryStage.show();
-
-        wordsList = new WordsList();
-        wordsList.addObserver(this);
-
-        imageView = new ImageView();
-
-        tabPane.getTabs().add(new Tab("Words", wordsList));
-//        tabPane.getTabs().add(new Tab("Image", imageView));
-
-        ProgressBar bar = new ProgressBar();
-        bar.progressProperty().bind(wordsList.readAllprogressProperty());
-        bar.prefWidthProperty().bind(root.widthProperty());
-        root.setBottom(bar);
     }
 
     private BorderPane root;
