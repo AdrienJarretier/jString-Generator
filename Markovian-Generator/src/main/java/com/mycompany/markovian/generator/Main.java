@@ -192,7 +192,9 @@ public class Main extends Application implements Observer {
 
                 }
 
-                loadWords(openedFile);
+                if (openedFile != null) {
+                    loadWords(openedFile);
+                }
 
             }
         });
